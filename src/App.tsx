@@ -27,7 +27,7 @@ function App() {
         element={<AuthGuard component={CallbackPage}/>} 
       />
       <Route path="/logout" element={<LogoutPage />} />
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<AuthGuard component={NotFoundPage}/>} />
     </Routes>
   )
 }
