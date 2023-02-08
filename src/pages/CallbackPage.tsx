@@ -1,14 +1,19 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { PageLayout } from '../components';
+import { useState } from 'react'
+import { PageLayout, WelcomeModal } from '../components';
+import { useUserEmail } from '../store';
 
 export function CallbackPage() {
-    const { isAuthenticated } = useAuth0()
+    const [isModalOpen, setIsModalOpen] = useState(true)
 
-    if (!isAuthenticated) return null
+    const userEmail = useUserEmail()
 
     return (
         <PageLayout>
-            <h1>Hello App!</h1>
+            <h1>{userEmail}</h1>
+            <WelcomeModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </PageLayout>
     )
 }
