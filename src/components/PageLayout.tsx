@@ -2,7 +2,7 @@ import {
     AppShell,
     useMantineTheme,
 } from '@mantine/core';
-import { AppHeader } from './Header';
+import { NavBar } from './Navbar';
 
 type PageLayoutProps = {
     children: React.ReactNode
@@ -20,7 +20,7 @@ export function PageLayout({children}: PageLayoutProps) {
                         : theme.colors.gray[0]
                 }
             }}
-            header={<AppHeader/>}
+            header={<NavBar/>}
         >
            { children }
         </AppShell>
