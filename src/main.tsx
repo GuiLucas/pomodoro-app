@@ -5,7 +5,10 @@ import { BrowserRouter } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
 import './index.css'
 import { Auth0ProviderWithNavigate } from './providers';
+import { QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -16,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     >
       <BrowserRouter>
         <Auth0ProviderWithNavigate>
-          <App />
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
         </Auth0ProviderWithNavigate>
       </BrowserRouter>
     </MantineProvider>
