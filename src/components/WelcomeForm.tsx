@@ -31,7 +31,13 @@ export function WelcomeForm() {
                 {...form.getInputProps('email')}
             />
             <Group position="center" mt="md">
-                <Button variant="light" color="violet.5" type="submit">Submit</Button>
+                <Button  
+                    variant="light" 
+                    color="violet"  
+                    type="submit"
+                >
+                    Submit
+                </Button>
             </Group>
         </form>
     </Box>

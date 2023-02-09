@@ -39,12 +39,12 @@ export function NavBar() {
                         : <Avatar radius="xl" color="violet" alt='profile-picture' />
                     }
                     {
+                        isAuthenticated && <SettingsModal />
+                    }
+                    {
                         isAuthenticated
                             ? <LogoutButton />
                             : <LoginButton />
-                    }
-                    {
-                        isAuthenticated && <SettingsModal />
                     }
                 </Flex>
             </div>

@@ -53,7 +53,7 @@ export function SettingsModal() {
             opened={opened}
             centered
             onClose={() => setOpened(false)}
-            title="Change timer settings"
+            title="Change time (minutes)"
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <TextInput
@@ -73,8 +73,8 @@ export function SettingsModal() {
                 />
                 <Group position="right" mt="md">
                     <Button
-                        variant="light"
-                        color="violet.5"
+                        variant="light" 
+                        color="violet" 
                         type="submit"
                     >
                         Submit
@@ -85,8 +85,8 @@ export function SettingsModal() {
 
         <Group position="center">
          <Button
-                variant="light"
-                color="violet.5"
+                 variant="light" 
+                 color="violet" 
                 onClick={() => setOpened(true)}
             >
                 Settings
