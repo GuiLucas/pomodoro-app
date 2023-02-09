@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import {
-    Badge,
     Box,
     Center,
     Flex,
-    Progress,
 } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
@@ -14,13 +12,15 @@ import {
     TodoList,
     LoaderOverlay,
     PomodoroStatus,
+    SettingsModal,
 } from '../components'
-import { useActiveTodo, useCompletedPomodoros, useStoreActions } from '../store'
+import { 
+    useActiveTodo, 
+    useCompletedPomodoros, 
+    useSettings, 
+    useStoreActions 
+} from '../store'
 import { useTodos } from '../lib'
-
-const SHORT_BREAK_TIME = 5 * 60
-const LONG_BREAK_TIME = 20 * 60
-const POMODORO_TIME = 25 * 60
 
 const shortBreakNotification = {
     title: 'Congrats!',
@@ -34,11 +34,17 @@ const longBreakNotification = {
     color: 'teal',
     autoClose: 10000
 }
+
 export function CallbackPage() {
     const { isLoading, error, data } = useTodos()
 
     const activeTodo = useActiveTodo()
     const completedPomodoros = useCompletedPomodoros()
+    const {
+        pomodoro: pomodoroTimer,
+        shortBreak,
+        longBreak
+    } = useSettings()
     const {
         setActiveTodo,
         toggleCompleted,
@@ -46,13 +52,13 @@ export function CallbackPage() {
     } = useStoreActions()
 
     const [taskSeconds, setTaskSeconds] = useState(0)
-    const [breakSeconds, setBreakSeconds] = useState(SHORT_BREAK_TIME)
+    const [breakSeconds, setBreakSeconds] = useState(shortBreak)
     const taskInterval = useInterval(() => setTaskSeconds((s) => s + 1), 1000)
     const breakInterval = useInterval(() => setBreakSeconds((s) => s - 1), 1000)
 
     useEffect(
         () => {
-            if (taskSeconds === POMODORO_TIME) {
+            if (taskSeconds === pomodoroTimer) {
                 breakInterval.start()
 
                 taskInterval.stop()
@@ -77,17 +83,12 @@ export function CallbackPage() {
 
     if (breakSeconds === 0) {
         breakInterval.stop()
-        setBreakSeconds(completedPomodoros === 3 ? LONG_BREAK_TIME : SHORT_BREAK_TIME)
+        setBreakSeconds(completedPomodoros === 3 ? longBreak : shortBreak)
     }
 
     function handleClickStart(todoId: number) {
-        if (todoId === activeTodo) {
-            taskInterval.toggle()
-        } else {
-            setTaskSeconds(0)
-            taskInterval.start()
-            setActiveTodo(todoId)
-        }
+        taskInterval.start()
+        setActiveTodo(todoId)
     }
 
     function handleClickStop() {

@@ -28,7 +28,6 @@ export function WelcomeForm() {
             <TextInput
                 placeholder="your@email.com"
                 label="Your Email"
-                style={{ borderColor: '#845ef' }}
                 {...form.getInputProps('email')}
             />
             <Group position="center" mt="md">

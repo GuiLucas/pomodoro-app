@@ -7,6 +7,7 @@ import {
 import { LoginButton } from "./LoginButton";
 import { LogoutButton } from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
+import { SettingsModal } from "./SettingsModal";
 
 export function NavBar() {
     const { isAuthenticated, user } = useAuth0()
@@ -17,7 +18,7 @@ export function NavBar() {
                 <Text c="violet.2" size="lg">
                     Pomodoro
                 </Text>
-                <Flex 
+                <Flex
                     gap="md"
                     justify="center"
                     align="center"
@@ -26,21 +27,24 @@ export function NavBar() {
                 >
                     {
                         user
-                        ?  <Flex
+                        ? <Flex
                             gap="md"
                             justify="center"
                             align="center"
                             direction="row"
                         >
-                            <Avatar radius="xl" src={user.picture} alt='profile-picture'/>
+                            <Avatar radius="xl" src={user.picture} alt='profile-picture' />
                             <Text>{user.name}</Text>
                         </Flex>
-                        : <Avatar radius="xl" color="violet" alt='profile-picture'/>
+                        : <Avatar radius="xl" color="violet" alt='profile-picture' />
                     }
                     {
                         isAuthenticated
                             ? <LogoutButton />
                             : <LoginButton />
+                    }
+                    {
+                        isAuthenticated && <SettingsModal />
                     }
                 </Flex>
             </div>
