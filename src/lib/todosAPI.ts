@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { User, Todo } from '../types'
+import { Todo } from '../types'
 import axios from 'axios'
-import { useUserEmail } from '../store'
+import { useStoreActions, useUserEmail } from '../store'
 
 const UsersEmailToId: Record<string, number> = {
     'Sincere@april.biz': 1,
@@ -16,36 +16,21 @@ const UsersEmailToId: Record<string, number> = {
     'Rey.Padberg@karina.biz': 10
 }
 
-async function fetchUsers() {
-    const response = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users/')
-    return response.data
-}
-
-async function fetchTodos(userId: number) {
+export async function fetchTodos(userId: number) {
     const response = await axios.get<Todo[]>(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
-    console.log(response.data)
     return response.data
-}
-
-export function useUsers() {
-    return useQuery(
-        {
-            queryKey: ['users'],
-            queryFn: fetchUsers
-        }
-    )
 }
 
 export function useTodos() {
-    const userEmail = useUserEmail()
-    let id: number = 0
-    if(userEmail) {
-        id = UsersEmailToId[userEmail]
-    }
+    const { setTodos } = useStoreActions()
+
+    const userId = UsersEmailToId[useUserEmail()]
+    
     return useQuery(
         {
-            queryKey: ['todos', id],
-            queryFn: () => fetchTodos(id)
+            queryKey: ['todos', userId],
+            queryFn: () => fetchTodos(userId),
+            onSuccess: (data) => setTodos(data as Todo[]),
         }
     )
 }
