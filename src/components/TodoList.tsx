@@ -1,5 +1,7 @@
 import { Box, Text } from "@mantine/core"
 import { Todo } from "../types"
+import { useTodos } from "../lib"
+import { LoaderOverlay } from "./LoaderOverlay"
 
 type TodoCardProps = {
     todo: Todo
@@ -17,16 +19,19 @@ function TodoCard(props: TodoCardProps) {
             })
         }
     >
-        <Text mb='sm' fw='bold'>{todo.title}</Text>
+        <Text mb='sm' fw='bold' ta='center'>{todo.title}</Text>
         <Text>{todo.body}</Text>
     </Box>
 }
 
-type TodoListProps = {
-    todos: Todo[]
-}
-export function TodoList(props: TodoListProps) {
-    const { todos } = props
+export function TodoList() {
+    const { isLoading, error, data } = useTodos()
+
+    if(isLoading) 
+        return <LoaderOverlay isFullScreen={false}/> 
+
+    if((error instanceof Error)) 
+        return <p>There was an error with retrieving data: {error?.message}</p>
     
     return <Box mt='lg' style={{maxWidth: '800px'}}>
         <Text 
@@ -37,7 +42,7 @@ export function TodoList(props: TodoListProps) {
             Todos
         </Text>
         {
-            todos.map(
+            data?.map(
                 todo => <TodoCard key={todo.id} todo={todo} />
             )
         }

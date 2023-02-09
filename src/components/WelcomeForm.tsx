@@ -1,4 +1,4 @@
-import { Box, Button, Center, Group, TextInput } from "@mantine/core";
+import { Box, Button, Group, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { usePomodorosActions, useUserEmail } from "../store";
 
