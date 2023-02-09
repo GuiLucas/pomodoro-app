@@ -13,16 +13,14 @@ import {
     WelcomeForm,
     TodoList,
     LoaderOverlay,
+    PomodoroStatus,
 } from '../components'
 import { useActiveTodo, useCompletedPomodoros, useStoreActions } from '../store'
 import { useTodos } from '../lib'
 
-// const SHORT_BREAK_TIME = 5 * 60
-// const LONG_BREAK_TIME = 20 * 60
-// const POMODORO_TIME = 25 * 60
-const SHORT_BREAK_TIME = 1
-const LONG_BREAK_TIME = 20
-const POMODORO_TIME = 2
+const SHORT_BREAK_TIME = 5 * 60
+const LONG_BREAK_TIME = 20 * 60
+const POMODORO_TIME = 25 * 60
 
 const shortBreakNotification = {
     title: 'Congrats!',
@@ -37,7 +35,7 @@ const longBreakNotification = {
     autoClose: 10000
 }
 export function CallbackPage() {
-    const { isLoading, error } = useTodos()
+    const { isLoading, error, data } = useTodos()
 
     const activeTodo = useActiveTodo()
     const completedPomodoros = useCompletedPomodoros()
@@ -101,7 +99,20 @@ export function CallbackPage() {
     const taskTimerActive = taskInterval.active
     const breakTimerActive = breakInterval.active
 
-    if (isLoading) return <LoaderOverlay />
+    if (isLoading) {
+        return <PageLayout>
+            <Box>
+                <Center>
+                    <Box>
+                        <Flex justify='center'>
+                            <WelcomeForm />
+                        </Flex>
+                        <LoaderOverlay isFullScreen={false} />
+                    </Box>
+                </Center>
+            </Box>
+        </PageLayout>
+    }
 
     if (error instanceof Error)
         return <p>There was an error with retrieving data: {error?.message}</p>
@@ -114,40 +125,16 @@ export function CallbackPage() {
                         <Flex justify='center'>
                             <WelcomeForm />
                         </Flex>
-                        <Progress
-                            mt='md'
-                            color="violet"
-                            radius="xl"
-                            size="xl"
-                            value={25 * completedPomodoros}
-                        />
-                        <Flex gap='md' justify='center' align={'center'} mt='md'>
-                            {/* <p>{Math.floor(seconds/60)} minutes</p> */}
-                            {
-                                taskTimerActive &&
-                                <Badge
-                                    color="violet"
-                                    variant="filled"
-                                >
-                                    Current Task {taskSeconds} seconds
-                                </Badge>
-                            }
-                            {
-                                breakTimerActive &&
-                                <Badge
-                                    color="violet"
-                                    variant="filled"
-                                >
-                                    Break for {breakSeconds} seconds
-                                </Badge>
-                            }
-                            <Badge
-                                color="teal"
-                                variant="filled"
-                            >
-                                {completedPomodoros} Pomodoros
-                            </Badge>
-                        </Flex>
+                        {
+                            data?.length
+                                ? <PomodoroStatus 
+                                    breakSeconds={breakSeconds}
+                                    breakTimerActive={breakTimerActive}
+                                    taskSeconds={taskSeconds}
+                                    taskTimerActive={taskTimerActive}
+                                />
+                                : null
+                        }
                         <TodoList
                             disableButtons={breakTimerActive}
                             onClickStart={handleClickStart}
