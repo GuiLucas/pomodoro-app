@@ -1,6 +1,6 @@
 import { Box, Button, Group, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { usePomodorosActions, useUserEmail } from "../store";
+import { useStoreActions, useUserEmail } from "../store";
 
 type FormValues = {
     email: string
@@ -8,7 +8,7 @@ type FormValues = {
 
 export function WelcomeForm() {
     const userEmail = useUserEmail()
-    const { setUserEmail } = usePomodorosActions()
+    const { setUserEmail } = useStoreActions()
 
     const form = useForm<FormValues>({
         initialValues: {
